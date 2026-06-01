@@ -5,7 +5,7 @@ echo "Starting full build + test process..."
 
 echo "Configuring Git hooks..."
 
-git config core.hooksPath .githooks
+git config core.hooksPath .git/hooks
 
 echo "Making hooks executable..."
 
