@@ -3,6 +3,18 @@ set -euo pipefail
 
 echo "Starting full build + test process..."
 
+echo "Configuring Git hooks..."
+
+git config core.hooksPath .githooks
+
+echo "Making hooks executable..."
+
+chmod +x .githooks/pre-commit
+chmod +x .githooks/post-merge
+
+echo "Setup complete."
+echo "Git hooks are now configured for this repository."
+
 # -----------------------------
 # 1. Create venv if missing
 # -----------------------------
