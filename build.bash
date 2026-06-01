@@ -9,7 +9,7 @@ git config core.hooksPath .githooks
 
 echo "Making hooks executable..."
 
-chmod +x .git/hooks/pre-commit
+# chmod +x .git/hooks/pre-commit
 chmod +x .git/hooks/post-merge
 
 echo "Setup complete."
