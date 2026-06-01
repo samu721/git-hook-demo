@@ -1,45 +1,54 @@
 #!/usr/bin/env bash
-
-set -e
+set -euo pipefail
 
 echo "Starting full build + test process..."
 
+# -----------------------------
+# 1. Create venv if missing
+# -----------------------------
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
     python3 -m venv venv
 fi
 
-echo "Activating virtual environment..."
-source venv/bin/activate
+# Always use venv python explicitly (more reliable than source)
+VENV_PY="venv/bin/python"
 
-
+# -----------------------------
+# 2. Upgrade pip
+# -----------------------------
 echo "Upgrading pip..."
-pip install --upgrade pip
+$VENV_PY -m pip install --upgrade pip
 
-
+# -----------------------------
+# 3. Install dependencies
+# -----------------------------
 echo "Installing dependencies..."
-pip install -r requirements.txt
+$VENV_PY -m pip install -r requirements.txt
 
-
+# -----------------------------
+# 4. Run app
+# -----------------------------
 echo "Running app.py..."
-python app.py
+$VENV_PY app.py
 
-
+# -----------------------------
+# 5. JSON validation (good file)
+# -----------------------------
 echo "Checking good.json..."
-python3 -m json.tool good.json > /dev/null
+$VENV_PY -m json.tool good.json > /dev/null
 echo "good.json is VALID"
 
-
+# -----------------------------
+# 6. JSON validation (bad file)
+# -----------------------------
 echo "Checking bad.json..."
-set +e
-python3 -m json.tool bad.json > /dev/null
 
-if [ $? -ne 0 ]; then
+if ! $VENV_PY -m json.tool bad.json > /dev/null 2>&1; then
     echo "bad.json is INVALID (expected behavior)"
 else
-    echo "WARNING: bad.json should have failed but didn't"
+    echo "❌ WARNING: bad.json should have failed but didn't"
+    exit 1
 fi
-set -e
 
-
-echo "Build + app run + JSON tests completed!"
+echo "Build + app run + JSON tests completed successfully!"

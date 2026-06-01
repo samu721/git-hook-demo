@@ -1,1 +1,13 @@
-flake8
+# Core dependencies
+requests==2.32.3
+python-dotenv==1.0.1
+
+# Data handling
+pydantic==2.8.2
+
+# Testing
+pytest==8.3.2
+
+# Linting / formatting (optional but common)
+black==24.8.0
+flake8==7.1.0
